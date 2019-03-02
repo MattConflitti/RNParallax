@@ -8,6 +8,7 @@ import {
   View,
   Dimensions,
   StatusBar,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 const {
@@ -247,23 +248,25 @@ class RNParallax extends Component {
   }
 
   renderHeaderBackground() {
-    const { backgroundImage, backgroundColor } = this.props;
+    const { backgroundImage, backgroundColor, onPress } = this.props;
     const imageOpacity = this.getImageOpacity();
 
     return (
-      <Animated.View
-        style={[
-          styles.header,
-          {
-            height: this.getHeaderHeight(),
-            opacity: imageOpacity,
-            backgroundColor: backgroundImage ? 'transparent' : backgroundColor,
-          },
-        ]}
-      >
-        {backgroundImage && this.renderBackgroundImage()}
-        {!backgroundImage && this.renderPlainBackground()}
-      </Animated.View>
+      <TouchableWithoutFeedback onPress={onPress}>
+        <Animated.View
+          style={[
+            styles.header,
+            {
+              height: this.getHeaderHeight(),
+              opacity: imageOpacity,
+              backgroundColor: backgroundImage ? 'transparent' : backgroundColor,
+            },
+          ]}
+        >
+          {backgroundImage && this.renderBackgroundImage()}
+          {!backgroundImage && this.renderPlainBackground()}
+        </Animated.View>
+      </TouchableWithoutFeedback>
     );
   }
 
@@ -346,10 +349,7 @@ class RNParallax extends Component {
           backgroundColor={statusBarColor || navbarColor}
         />
         {this.renderScrollView()}
-        {this.renderNavbarBackground()}
         {this.renderHeaderBackground()}
-        {this.renderHeaderTitle()}
-        {this.renderHeaderForeground()}
       </View>
     );
   }
@@ -398,6 +398,7 @@ RNParallax.defaultProps = {
   alwaysShowNavBar: true,
   statusBarColor: null,
   scrollViewProps: {},
+  onPress: () => {},
 };
 
 export default RNParallax;
